@@ -1,11 +1,9 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 1
+ * Assignment:      Lab Exercise 2
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
 using UnityEngine;
-
-//WE ARE NOW IN LE2
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
