@@ -1,3 +1,8 @@
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 2
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,9 +22,14 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.GetGameState() == EGameState.InPlay)
         {
             //...move right
-            float distancePerFrame = speed * Time.deltaTime;
-            transform.Translate(distancePerFrame, 0, 0);
+            MovePlayer();
         }
+    }
+
+    private void MovePlayer()
+    {
+        float distancePerFrame = speed * Time.deltaTime;
+        transform.Translate(distancePerFrame, 0, 0);
     }
 
     public void ResetPlayer()

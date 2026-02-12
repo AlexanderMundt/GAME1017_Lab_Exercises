@@ -528,7 +528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397199bf63a673b448d299d99668dfa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  m_preserveOnLoad: 1
   musicSource: {fileID: 1282695746}
   sfxSource: {fileID: 635330900}
 --- !u!1 &302291830
@@ -895,6 +894,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   m_preserveOnLoad: 1
   CurrentGameState: 0
+  soundManager: {fileID: 232519618}
+  backgroundManager: {fileID: 1719879794}
 --- !u!1 &485759655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,7 +1195,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.05
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3383,8 +3384,8 @@ SceneRoots:
   - {fileID: 635330901}
   - {fileID: 1886168881}
   - {fileID: 394576220}
-  - {fileID: 1719879793}
   - {fileID: 232519617}
+  - {fileID: 1719879793}
   - {fileID: 370158263}
   - {fileID: 1410728524}
   - {fileID: 1161826158}

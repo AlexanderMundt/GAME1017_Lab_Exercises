@@ -43,11 +43,11 @@ public class SliderAudioController : MonoBehaviour
                 break;
 
             case EAudioType.Music:
-                SoundManager.Instance.ChangeMusicVolume(newVolume);
+                GameManager.Instance.soundManager.ChangeMusicVolume(newVolume);
                 break;
 
             case EAudioType.Sfx:
-                SoundManager.Instance.ChangeSfxVolume(newVolume);
+                GameManager.Instance.soundManager.ChangeSfxVolume(newVolume);
                 break;
 
             default:

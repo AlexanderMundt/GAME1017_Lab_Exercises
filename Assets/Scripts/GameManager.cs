@@ -1,9 +1,17 @@
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 2
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private EGameState CurrentGameState;
+
+    [Header("Managers")]
+    [SerializeField] public SoundManager soundManager;
+    [SerializeField] private BackgroundManager backgroundManager;
 
     private void Start()
     {
@@ -24,7 +32,7 @@ public class GameManager : Singleton<GameManager>
     public void RestartGame()
     {
         FindFirstObjectByType<PlayerController>().ResetPlayer();
-        BackgroundManager.Instance.ResetBackground();
+        backgroundManager.ResetBackground();
         SetGameState(EGameState.InMenu);
     }
 

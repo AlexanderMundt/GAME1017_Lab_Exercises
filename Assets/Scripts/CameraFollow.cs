@@ -1,5 +1,10 @@
-using Unity.VisualScripting;
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 2
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class CameraFollow : MonoBehaviour
 {

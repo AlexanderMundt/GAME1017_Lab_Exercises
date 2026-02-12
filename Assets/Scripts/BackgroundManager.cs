@@ -1,7 +1,12 @@
-using System.Collections.Generic;
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 2
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
+using System.Collections.Generic;
 
-public class BackgroundManager : Singleton<BackgroundManager>
+public class BackgroundManager : MonoBehaviour
 {
     [SerializeField] private GameObject backgroundPrefab;
     [SerializeField] private Camera cam;
@@ -109,23 +114,22 @@ public class BackgroundManager : Singleton<BackgroundManager>
         {
             float prevDist = 0.0f;
             float dist = 0.0f;
-            GameObject objectToReturn = null;
+            GameObject farthestBehindBackground = null;
 
-            foreach (GameObject bg in backgrounds)
+            foreach (GameObject background in backgrounds)
             {
-                dist = Vector3.Distance(bg.transform.position, cam.transform.position);
+                dist = Vector3.Distance(background.transform.position, cam.transform.position);
 
                 if (dist > prevDist)
                 {
                     prevDist = dist;
-                    objectToReturn = bg;
+                    farthestBehindBackground = background;
                 }
             }
 
-            ReturnToPool(objectToReturn);
+            ReturnToPool(farthestBehindBackground);
         }
 
-        //lastBackground = Instantiate(backgroundPrefab, spawnPos, Quaternion.identity, transform).transform;
         lastBackground = GetNextObject().transform;
         lastBackground.position = spawnPos;
         lastRenderer = lastBackground.GetComponent<Renderer>();

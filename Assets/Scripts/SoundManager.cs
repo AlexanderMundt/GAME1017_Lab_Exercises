@@ -5,7 +5,7 @@
  */
 using UnityEngine;
 
-public class SoundManager : Singleton<SoundManager>
+public class SoundManager : MonoBehaviour
 {
     [SerializeField] private AudioSource musicSource, sfxSource;
 
