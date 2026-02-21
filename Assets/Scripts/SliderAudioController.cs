@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 2
+ * Assignment:      Lab Exercise 3
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -43,11 +43,11 @@ public class SliderAudioController : MonoBehaviour
                 break;
 
             case EAudioType.Music:
-                GameManager.Instance.soundManager.ChangeMusicVolume(newVolume);
+                GameManager.Instance.SoundManager.ChangeMusicVolume(newVolume);
                 break;
 
             case EAudioType.Sfx:
-                GameManager.Instance.soundManager.ChangeSfxVolume(newVolume);
+                GameManager.Instance.SoundManager.ChangeSfxVolume(newVolume);
                 break;
 
             default:

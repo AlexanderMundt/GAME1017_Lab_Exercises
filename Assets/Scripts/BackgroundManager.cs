@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 2
+ * Assignment:      Lab Exercise 3
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -9,31 +9,34 @@ using System.Collections.Generic;
 public class BackgroundManager : MonoBehaviour
 {
     [SerializeField] private GameObject backgroundPrefab;
-    [SerializeField] private Camera cam;
     [SerializeField] private float xBuffer = 3f;
-
-    private Transform lastBackground;
-    private Renderer lastRenderer;
     private float backgroundWidth;
-
     private float nextSpawnAtCamRightX; // world X where camera-right must reach to spawn again
 
     //Object pool
-    private List<GameObject> backgrounds = new();
-    private const int OBJECT_POOL_SIZE = 3;
+    [SerializeField] private List<GameObject> backgrounds = new();
+    [SerializeField] private int backgroundPoolSize;
+
+    [SerializeField] private Transform lastBackground;
+    [SerializeField] private Renderer lastRenderer;
+
+    [SerializeField] private Camera cam;
 
     private void Start()
     {
         if (!cam) cam = Camera.main;
 
         GameObject go;
-        for (int i = 0; i < OBJECT_POOL_SIZE; i++)
+        for (int i = 0; i < backgroundPoolSize; i++)
         {
             go = Instantiate(backgroundPrefab, this.transform);
             go.SetActive(false);
             backgrounds.Add(go);
         }
+    }
 
+    public void Initialize()
+    {
         lastBackground = GetNextObject().transform;
         lastRenderer = lastBackground.GetComponent<Renderer>();
         backgroundWidth = lastRenderer.bounds.size.x;
@@ -45,14 +48,23 @@ public class BackgroundManager : MonoBehaviour
 
     private void Update()
     {
-        float halfCamWidth = cam.orthographicSize * cam.aspect;
-        float camRightEdge = cam.transform.position.x + halfCamWidth;
-
-        if (camRightEdge >= nextSpawnAtCamRightX)
+        if (lastBackground != null && lastRenderer != null)
         {
-            SpawnNextToRight();
-            UpdateNextSpawnTrigger();
+            float halfCamWidth = cam.orthographicSize * cam.aspect;
+            float camRightEdge = cam.transform.position.x + halfCamWidth;
+
+            if (camRightEdge >= nextSpawnAtCamRightX)
+            {
+                SpawnNextToRight();
+                UpdateNextSpawnTrigger();
+            }
         }
+    }
+
+    private void UpdateNextSpawnTrigger()
+    {
+        // Spawn again only after camera reaches the (new) last background's right edge
+        nextSpawnAtCamRightX = lastRenderer.bounds.max.x - xBuffer;
     }
 
     //GetNext
@@ -68,6 +80,19 @@ public class BackgroundManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private bool IsNextObjectAvailable()
+    {
+        foreach (GameObject background in backgrounds)
+        {
+            if (!background.activeSelf)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //Return to pool
@@ -86,6 +111,42 @@ public class BackgroundManager : MonoBehaviour
         }
     }
 
+    private void SpawnNextToRight()
+    {
+        Vector3 spawnPos = lastBackground.position;
+        spawnPos.x += backgroundWidth;
+
+        if (!IsNextObjectAvailable())
+        {
+            DespawnFurthestBackground();
+        }
+
+        lastBackground = GetNextObject().transform;
+        lastBackground.position = spawnPos;
+        lastRenderer = lastBackground.GetComponent<Renderer>();
+        lastRenderer.sortingOrder = 0;
+    }
+
+    private void DespawnFurthestBackground()
+    {
+        float prevDist = 0.0f;
+        float dist = 0.0f;
+        GameObject farthestBehindBackground = null;
+
+        foreach (GameObject background in backgrounds)
+        {
+            dist = Vector3.Distance(background.transform.position, cam.transform.position);
+
+            if (dist > prevDist)
+            {
+                prevDist = dist;
+                farthestBehindBackground = background;
+            }
+        }
+
+        ReturnToPool(farthestBehindBackground);
+    }
+
     //Reset backgrounds
     public void ResetBackground()
     {
@@ -98,47 +159,8 @@ public class BackgroundManager : MonoBehaviour
             background.transform.position = transform.position;
         }
 
-        //Update the last background and renderer to the new(original) starting position
-        lastBackground = GetNextObject().transform;
-        lastRenderer = lastBackground.GetComponent<Renderer>();
-
-        UpdateNextSpawnTrigger();
-    }
-
-    private void SpawnNextToRight()
-    {
-        Vector3 spawnPos = lastBackground.position;
-        spawnPos.x += backgroundWidth;
-
-        if (GetNextObject() == null)
-        {
-            float prevDist = 0.0f;
-            float dist = 0.0f;
-            GameObject farthestBehindBackground = null;
-
-            foreach (GameObject background in backgrounds)
-            {
-                dist = Vector3.Distance(background.transform.position, cam.transform.position);
-
-                if (dist > prevDist)
-                {
-                    prevDist = dist;
-                    farthestBehindBackground = background;
-                }
-            }
-
-            ReturnToPool(farthestBehindBackground);
-        }
-
-        lastBackground = GetNextObject().transform;
-        lastBackground.position = spawnPos;
-        lastRenderer = lastBackground.GetComponent<Renderer>();
-        lastRenderer.sortingOrder = 0;
-    }
-
-    private void UpdateNextSpawnTrigger()
-    {
-        // Spawn again only after camera reaches the (new) last background's right edge
-        nextSpawnAtCamRightX = lastRenderer.bounds.max.x - xBuffer;
+        lastBackground = null;
+        lastRenderer = null;
+        nextSpawnAtCamRightX = 0.0f;
     }
 }
