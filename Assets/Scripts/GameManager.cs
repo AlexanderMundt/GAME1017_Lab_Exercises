@@ -11,6 +11,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private EGameState CurrentGameState;
     [SerializeField] private string gameSceneName;
     [SerializeField] private string gameOverSceneName;
+    [SerializeField] private float elapsedTimeSeconds;
 
     private SoundManager soundManager;
     public SoundManager SoundManager
