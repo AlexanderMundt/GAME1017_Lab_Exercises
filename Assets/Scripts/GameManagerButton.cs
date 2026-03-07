@@ -28,6 +28,10 @@ public class GameManagerButton : MonoBehaviour
                 GameManager.Instance.PlayGame();
                 break;
 
+            case EGameManagerAction.Start:
+                GameManager.Instance.StartGame();
+                break;
+
             case EGameManagerAction.GameOver:
                 GameManager.Instance.GameOver();
                 break;

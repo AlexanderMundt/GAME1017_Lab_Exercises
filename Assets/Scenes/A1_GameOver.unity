@@ -874,7 +874,7 @@ GameObject:
   - component: {fileID: 694065372}
   - component: {fileID: 694065371}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Button ReturnTitle Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,7 +919,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Restart
+  m_text: Return To Title Screen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -946,8 +946,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65
-  m_fontSizeBase: 65
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1098,7 +1098,7 @@ GameObject:
   - component: {fileID: 907930660}
   - component: {fileID: 907930663}
   m_Layer: 5
-  m_Name: Restart Button
+  m_Name: Button ReturnTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1122,7 +1122,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 320, y: 160}
+  m_SizeDelta: {x: 400, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &907930660
 MonoBehaviour:
@@ -1217,8 +1217,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: defd3d006583924449410e447327868c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RestartButton
-  sceneToLoad: LE3
+  m_EditorClassIdentifier: Assembly-CSharp::ReturnTitleButton
+  sceneToLoad: A1_Title
 --- !u!1 &986300097
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,7 +1409,7 @@ GameObject:
   - component: {fileID: 1426981052}
   - component: {fileID: 1426981051}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: GameStateCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1843,11 +1843,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -2274,6 +2274,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 184791046}
   - {fileID: 1926865697}
+  - {fileID: 744312096}
   - {fileID: 1426981054}
   - {fileID: 1894203761}
-  - {fileID: 744312096}

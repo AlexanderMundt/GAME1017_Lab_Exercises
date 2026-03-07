@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private EGameState CurrentGameState;
+    [SerializeField] private string gameSceneName;
+    [SerializeField] private string gameOverSceneName;
 
     private SoundManager soundManager;
     public SoundManager SoundManager
@@ -82,6 +84,24 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private UiManager uiManager;
+    public UiManager UiManager
+    {
+        get
+        {
+            if (uiManager == null)
+            {
+                uiManager = FindFirstObjectByType<UiManager>();
+            }
+
+            return uiManager;
+        }
+        private set
+        {
+            uiManager = value;
+        }
+    }
+
     private void Start()
     {
         SetGameState(EGameState.InMenu);
@@ -91,31 +111,32 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         SetGameState(EGameState.InGameOver);
-        SceneManager.LoadScene("LE3_GameOver");
+        SceneManager.LoadScene(gameOverSceneName);
     }
 
     public void PlayGame()
     {
-        //Only switch to InPlay if we are not already playing
-        if (CurrentGameState != EGameState.InPlay)
-        {
-            SetGameState(EGameState.InPlay);
+        SceneManager.LoadScene(gameSceneName);
+        SetGameState(EGameState.InMenu);
+    }
 
-            Player.Initialize();
-            BackgroundManager.Initialize();
-            SegmentSpawner.Initialize();
-        }
+    //Fired from game scene
+    public void StartGame()
+    {
+        SetGameState(EGameState.InPlay);
+
+        SegmentSpawner.Initialize();
+        Player.Initialize();
+
+        UiManager.OnStartPressed();
     }
 
     public void RestartGame()
     {
-        //Only reset stuff if we are in play
-        if (CurrentGameState == EGameState.InPlay)
-        {
-            Player.ResetPlayer();
-            BackgroundManager.ResetBackground();
-            SegmentSpawner.ResetSegments();
-        }
+        Player.ResetPlayer();
+        SegmentSpawner.ResetSegments();
+
+        UiManager.OnRestartPressed();
 
         SetGameState(EGameState.InMenu);
     }

@@ -6,6 +6,7 @@
 public enum EGameManagerAction
 {
     Play = 1,
-    GameOver = 2,
-    Restart = 3
+    Start = 2,
+    GameOver = 3,
+    Restart = 4
 }

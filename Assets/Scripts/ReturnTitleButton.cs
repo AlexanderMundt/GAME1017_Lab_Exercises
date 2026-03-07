@@ -7,25 +7,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class RestartButton : MonoBehaviour
+public class ReturnTitleButton : MonoBehaviour
 {
     [SerializeField] private string sceneToLoad;
 
     private void OnEnable()
     {
-        GetComponent<Button>().onClick.AddListener(RestartGame);
+        GetComponent<Button>().onClick.AddListener(ReturnToTitle);
     }
 
     private void OnDisable()
     {
-        GetComponent<Button>().onClick.RemoveListener(RestartGame);
+        GetComponent<Button>().onClick.RemoveListener(ReturnToTitle);
     }
 
-    private void RestartGame()
+    private void ReturnToTitle()
     {
-        //Destroying the game manager here makes sure that we create a
-        //new fresh one when we need it in the actual game scene
-        Destroy(GameManager.Instance.gameObject);
+        ////Destroying the game manager here makes sure that we create a
+        ////new fresh one when we need it in the actual game scene
+        //Destroy(GameManager.Instance.gameObject);
         SceneManager.LoadScene(sceneToLoad);
     }
 }
