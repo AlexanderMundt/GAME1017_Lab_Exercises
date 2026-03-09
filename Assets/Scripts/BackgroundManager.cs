@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 3
+ * Assignment:      Assignment 1
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -33,6 +33,8 @@ public class BackgroundManager : MonoBehaviour
             go.SetActive(false);
             backgrounds.Add(go);
         }
+
+        backgrounds[0].SetActive(true);
     }
 
     public void Initialize()
@@ -162,5 +164,7 @@ public class BackgroundManager : MonoBehaviour
         lastBackground = null;
         lastRenderer = null;
         nextSpawnAtCamRightX = 0.0f;
+
+        backgrounds[0].SetActive(true);
     }
 }

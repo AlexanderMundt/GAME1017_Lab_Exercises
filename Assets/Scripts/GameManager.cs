@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 3
+ * Assignment:      Assignment 1
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -126,6 +126,7 @@ public class GameManager : Singleton<GameManager>
     {
         SetGameState(EGameState.InPlay);
 
+        BackgroundManager.Initialize();
         SegmentSpawner.Initialize();
         Player.Initialize();
 
@@ -136,6 +137,7 @@ public class GameManager : Singleton<GameManager>
     {
         Player.ResetPlayer();
         SegmentSpawner.ResetSegments();
+        BackgroundManager.ResetBackground();
 
         UiManager.OnRestartPressed();
 

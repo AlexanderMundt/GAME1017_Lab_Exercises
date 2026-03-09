@@ -1,12 +1,18 @@
-using TMPro;
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Assignment 1
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
+using TMPro;
 
 public class UiManager : MonoBehaviour
 {
     [SerializeField] private GameObject startButton, restartButton, gameOverButton;
     [SerializeField] private TMP_Text timerValue;
-    [SerializeField] private bool isTimerRunning;
-    [SerializeField] private float elapsedTime;
+
+    private bool isTimerRunning;
+    private float elapsedTime;
 
     private void Start()
     {

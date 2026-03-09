@@ -1410,6 +1410,7 @@ MonoBehaviour:
   startButton: {fileID: 1810516377}
   restartButton: {fileID: 1377462306}
   gameOverButton: {fileID: 1178296663}
+  timerValue: {fileID: 1630710695}
   isTimerRunning: 0
   elapsedTime: 0
 --- !u!4 &568807679

@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 3
+ * Assignment:      Assignment 1
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */

@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 3
+ * Assignment:      Assignment 1
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -23,9 +23,6 @@ public class ReturnTitleButton : MonoBehaviour
 
     private void ReturnToTitle()
     {
-        ////Destroying the game manager here makes sure that we create a
-        ////new fresh one when we need it in the actual game scene
-        //Destroy(GameManager.Instance.gameObject);
         SceneManager.LoadScene(sceneToLoad);
     }
 }
