@@ -139,34 +139,6 @@ public class SegmentSpawner : MonoBehaviour
     //    }
     //}
 
-    //Reset segments
-    public void ResetSegments()
-    {
-        //"Turn off" all of the segments
-        //ReturnAllToPool();
-
-        //Reset the position of all of the segments
-        //foreach (GameObject seg in segments)
-        //{
-        //    seg.transform.position = transform.position;
-        //}
-
-        lastSegment = null;
-        lastRenderer = null;
-
-        lastIndex = 0;
-
-        currentSegment = null;
-        currentRenderer = null;
-
-        foreach (GameObject seg in segments)
-        {
-            Destroy(seg);
-        }
-
-        segments.Clear();
-    }
-
     //---Old object pool way---
     //private void SpawnPlatform()
     //{
@@ -225,7 +197,7 @@ public class SegmentSpawner : MonoBehaviour
         currentRenderer = currentSegment.GetComponent<Renderer>();
 
         float xSpawnPos = lastRenderer.bounds.max.x + (currentRenderer.bounds.size.x / 2) + gapSize;
-        currentSegment.transform.position = new Vector3(xSpawnPos, lastSegment.transform.position.y + heightOffset, 0);
+        currentSegment.transform.position = new Vector3(xSpawnPos, heightOffset, 0);
 
         segments.Add(currentSegment);
 
@@ -260,4 +232,32 @@ public class SegmentSpawner : MonoBehaviour
 
     //    ReturnToPool(farthestBehindSegment);
     //}
+
+    //Reset segments
+    public void ResetSegments()
+    {
+        //"Turn off" all of the segments
+        //ReturnAllToPool();
+
+        //Reset the position of all of the segments
+        //foreach (GameObject seg in segments)
+        //{
+        //    seg.transform.position = transform.position;
+        //}
+
+        lastSegment = null;
+        lastRenderer = null;
+
+        lastIndex = 0;
+
+        currentSegment = null;
+        currentRenderer = null;
+
+        foreach (GameObject seg in segments)
+        {
+            Destroy(seg);
+        }
+
+        segments.Clear();
+    }
 }

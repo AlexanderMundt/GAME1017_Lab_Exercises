@@ -5,17 +5,16 @@
  */
 
 using UnityEngine;
-using System;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float speedLimit;
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
 
     [Tooltip("Represents the lowest position that player can go in the y axis before dying")]
-    [SerializeField] private float lowerYLimit;
+    [SerializeField] private float lowerYDeathPlane;
 
     private Vector3 startPosition;
     private Rigidbody2D rb;
@@ -30,6 +29,9 @@ public class PlayerController : MonoBehaviour
         //Turn on gravity
         rb = GetComponent<Rigidbody2D>();
         rb.simulated = true;
+
+        //Set initial speed
+        rb.linearVelocity = new Vector2(speedLimit, 0.0f);
     }
 
     void Update()
@@ -41,13 +43,7 @@ public class PlayerController : MonoBehaviour
             CheckGrounded();
 
             //Check if the player has fallen
-            CheckLowerYLimit();
-
-            Debug.Log(Math.Abs(rb.linearVelocityX));
-            if (Math.Abs(rb.linearVelocityX) < 0.01)
-            {
-                GameManager.Instance.GameOver();
-            }
+            CheckLowerYDeathPlane();
         }
     }
 
@@ -56,15 +52,21 @@ public class PlayerController : MonoBehaviour
         //When we are InPlay...
         if (GameManager.Instance.GetGameState() == EGameState.InPlay)
         {
-            //...move right
-            //MovePlayer();
+            //If the player is stuck then gameover
+            if (rb.linearVelocity.magnitude == 0)
+            {
+                GameManager.Instance.GameOver();
+            }
 
-            //Constant lateral movement
-            Vector2 vel = rb.linearVelocity;
-            vel.x = speed;
+            //Movement stuff
+            rb.AddForce(1.0f * Vector2.right, ForceMode2D.Impulse);
 
-            rb.linearVelocity = vel;
+            //Clamp only the x axis movement
+            Vector2 currentLinVel = rb.linearVelocity;
+            currentLinVel.x = Mathf.Clamp(currentLinVel.x, 0.0f, speedLimit);
+            rb.linearVelocity = currentLinVel;
 
+            //Jump stuff
             if (jumpPressed && isGrounded)
             {
                 Jump();
@@ -74,20 +76,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //private void MovePlayer()
-    //{
-    //    float distancePerFrame = speed * Time.deltaTime;
-    //    transform.Translate(distancePerFrame, 0, 0);
-    //}
-
     private void CheckGrounded()
     {
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
     }
 
-    private void CheckLowerYLimit()
+    private void CheckLowerYDeathPlane()
     {
-        if (transform.position.y < lowerYLimit)
+        if (transform.position.y < lowerYDeathPlane)
         {
             GameManager.Instance.GameOver();
         }
