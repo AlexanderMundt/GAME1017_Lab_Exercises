@@ -6,14 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/A1_Title.unity
-    guid: 5f0cccc8d5517cc4e94350532a566279
+    path: Assets/Scenes/LE4_Title.unity
+    guid: 5d9c6cbdde2868e47ae918693dd667ad
   - enabled: 1
-    path: Assets/Scenes/A1.unity
-    guid: 59513143fc666a6499b912ef74e6cc7c
+    path: Assets/Scenes/LE4.unity
+    guid: aeafd4057050f12488cedb5f15a4dd53
   - enabled: 1
-    path: Assets/Scenes/A1_GameOver.unity
-    guid: 099aa4acd5380d945ae6d79d87dab922
+    path: Assets/Scenes/LE4_GameOver.unity
+    guid: 4e21358801bed0b478570780c4163c79
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

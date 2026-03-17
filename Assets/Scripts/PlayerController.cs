@@ -3,7 +3,9 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
+
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
+
+    [Tooltip("Represents the lowest position that player can go in the y axis before dying")]
+    [SerializeField] private float lowerYLimit;
 
     private Vector3 startPosition;
     private Rigidbody2D rb;
@@ -34,6 +39,15 @@ public class PlayerController : MonoBehaviour
         {
             //...check if the player is on the ground
             CheckGrounded();
+
+            //Check if the player has fallen
+            CheckLowerYLimit();
+
+            Debug.Log(Math.Abs(rb.linearVelocityX));
+            if (Math.Abs(rb.linearVelocityX) < 0.01)
+            {
+                GameManager.Instance.GameOver();
+            }
         }
     }
 
@@ -43,7 +57,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.GetGameState() == EGameState.InPlay)
         {
             //...move right
-            MovePlayer();
+            //MovePlayer();
 
             //Constant lateral movement
             Vector2 vel = rb.linearVelocity;
@@ -60,15 +74,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void MovePlayer()
-    {
-        float distancePerFrame = speed * Time.deltaTime;
-        transform.Translate(distancePerFrame, 0, 0);
-    }
+    //private void MovePlayer()
+    //{
+    //    float distancePerFrame = speed * Time.deltaTime;
+    //    transform.Translate(distancePerFrame, 0, 0);
+    //}
 
     private void CheckGrounded()
     {
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+    }
+
+    private void CheckLowerYLimit()
+    {
+        if (transform.position.y < lowerYLimit)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 
     private void Jump()

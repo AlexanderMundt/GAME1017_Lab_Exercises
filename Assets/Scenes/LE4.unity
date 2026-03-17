@@ -146,7 +146,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 344784697}
@@ -239,16 +239,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dfb1731ecbecf644bcd1eef04e8344c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SegmentSpawner
-  segmentPrefab: {fileID: 4008276512789579302, guid: 1d6a63e05d451e6408f73dec991642b2, type: 3}
+  segmentPrefabs:
+  - {fileID: 4008276512789579302, guid: 1d6a63e05d451e6408f73dec991642b2, type: 3}
+  - {fileID: 627500526972431799, guid: 42df916dbd23c404a8ca00f7584b5f71, type: 3}
+  - {fileID: 4521891861973740406, guid: 22991dec3b9ea75439d5ceb50b5cc9fc, type: 3}
+  - {fileID: 2336856873538416950, guid: 9fd077d5ed531b94cbcce1c1953847cd, type: 3}
   maxDistanceFromPlayer: 20
-  gapSize: 0.5
   segments: []
-  segmentPoolSize: 5
+  segmentListSize: 5
   lastSegment: {fileID: 0}
   currentSegment: {fileID: 0}
   lastRenderer: {fileID: 0}
   currentRenderer: {fileID: 0}
   player: {fileID: 344784695}
+  gapRange: {x: 0.5, y: 1.5}
+  heightRange: {x: -1, y: 1}
 --- !u!4 &118143215
 Transform:
   m_ObjectHideFlags: 0
@@ -721,11 +726,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speed: 3.5
-  jumpForce: 8
+  jumpForce: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   groundCheckDistance: 0.6
+  lowerYLimit: -6.5
 --- !u!4 &344784697
 Transform:
   m_ObjectHideFlags: 0
@@ -735,7 +741,7 @@ Transform:
   m_GameObject: {fileID: 344784695}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -816,7 +822,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.7, y: 0.7}
   m_EdgeRadius: 0
 --- !u!50 &344784700
 Rigidbody2D:
@@ -1059,8 +1065,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   m_preserveOnLoad: 1
   CurrentGameState: 0
-  gameSceneName: A1
-  gameOverSceneName: A1_GameOver
+  gameSceneName: LE4
+  gameOverSceneName: LE4_GameOver
   elapsedTimeSeconds: 0
 --- !u!1 &485759655
 GameObject:
@@ -1411,8 +1417,6 @@ MonoBehaviour:
   restartButton: {fileID: 1377462306}
   gameOverButton: {fileID: 1178296663}
   timerValue: {fileID: 1630710695}
-  isTimerRunning: 0
-  elapsedTime: 0
 --- !u!4 &568807679
 Transform:
   m_ObjectHideFlags: 0

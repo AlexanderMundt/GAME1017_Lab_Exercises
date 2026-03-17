@@ -483,8 +483,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   m_preserveOnLoad: 1
   CurrentGameState: 0
-  gameSceneName: A1
-  gameOverSceneName: A1_GameOver
+  gameSceneName: LE4
+  gameOverSceneName: LE4_GameOver
+  elapsedTimeSeconds: 0
 --- !u!1 &1783425212
 GameObject:
   m_ObjectHideFlags: 0
