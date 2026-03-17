@@ -485,7 +485,7 @@ MonoBehaviour:
   CurrentGameState: 0
   gameSceneName: LE4
   gameOverSceneName: LE4_GameOver
-  elapsedTimeSeconds: 0
+  difficultyIncreaseInterval: 5
 --- !u!1 &1783425212
 GameObject:
   m_ObjectHideFlags: 0

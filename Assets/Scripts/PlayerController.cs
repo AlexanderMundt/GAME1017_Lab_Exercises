@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
             //If the player is stuck then gameover
             if (rb.linearVelocity.magnitude == 0)
             {
-                GameManager.Instance.GameOver();
+                OnPlayerDeath();
             }
 
             //Movement stuff
@@ -76,19 +76,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CheckGrounded()
-    {
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
-    }
-
-    private void CheckLowerYDeathPlane()
-    {
-        if (transform.position.y < lowerYDeathPlane)
-        {
-            GameManager.Instance.GameOver();
-        }
-    }
-
     private void Jump()
     {
         //Reset vertical speed for consistent jump height
@@ -104,6 +91,31 @@ public class PlayerController : MonoBehaviour
     public void OnJump()
     {
         jumpPressed = true;
+    }
+
+    //Called by the gamemanager to increase difficulty
+    public void IncreaseSpeedLimit()
+    {
+        speedLimit++;
+    }
+
+    //Utils
+    private void CheckGrounded()
+    {
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+    }
+
+    private void CheckLowerYDeathPlane()
+    {
+        if (transform.position.y < lowerYDeathPlane)
+        {
+            OnPlayerDeath();
+        }
+    }
+
+    private void OnPlayerDeath()
+    {
+        GameManager.Instance.GameOver();
     }
 
     public void ResetPlayer()

@@ -3,6 +3,8 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +13,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private EGameState CurrentGameState;
     [SerializeField] private string gameSceneName;
     [SerializeField] private string gameOverSceneName;
-    [SerializeField] private float elapsedTimeSeconds;
+    [SerializeField] private int difficultyIncreaseInterval;
+
+    private float difficultyIncreaseIntervalTimer;
+    private float gameplayTimer;
 
     private SoundManager soundManager;
     public SoundManager SoundManager
@@ -108,9 +113,24 @@ public class GameManager : Singleton<GameManager>
         SetGameState(EGameState.InMenu);
     }
 
+    //Getter
+    public EGameState GetGameState()
+    {
+        return CurrentGameState;
+    }
+
+    //Setter
+    private void SetGameState(EGameState state)
+    {
+        CurrentGameState = state;
+    }
+
     //States
     public void GameOver()
     {
+        StopAllCoroutines();
+        ResetTimers();
+
         SetGameState(EGameState.InGameOver);
         SceneManager.LoadScene(gameOverSceneName);
     }
@@ -119,6 +139,10 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene(gameSceneName);
         SetGameState(EGameState.InMenu);
+
+        //Start coroutines
+        StartCoroutine(TimerCoroutine());
+        StartCoroutine(DifficultyAdjustCoroutine());
     }
 
     //Fired from game scene
@@ -141,18 +165,60 @@ public class GameManager : Singleton<GameManager>
 
         UiManager.OnRestartPressed();
 
+        //Timers
+        ResetTimers();
+        UiManager.UpdateTimerUi(gameplayTimer);
+
         SetGameState(EGameState.InMenu);
     }
 
-    //Setter
-    private void SetGameState(EGameState state)
+    private void ResetTimers()
     {
-        CurrentGameState = state;
+        ResetGameplayTimer();
+        ResetDifficultyTimer();
     }
 
-    //Getter
-    public EGameState GetGameState()
+    private void ResetGameplayTimer()
     {
-        return CurrentGameState;
+        gameplayTimer = 0.0f;
+    }
+
+    private void ResetDifficultyTimer()
+    {
+        difficultyIncreaseIntervalTimer = 0.0f;
+    }
+
+    //Coroutines
+    IEnumerator TimerCoroutine()
+    {
+        while (true)
+        {
+            //Control whether or not the timer is counting
+            //Only count time when in the 'InPlay' state
+            yield return new WaitUntil(() => CurrentGameState == EGameState.InPlay);
+
+            gameplayTimer += Time.deltaTime;
+            UiManager.UpdateTimerUi(gameplayTimer);
+        }
+    }
+
+    IEnumerator DifficultyAdjustCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitUntil(() => CurrentGameState == EGameState.InPlay);
+            yield return new WaitForSeconds(difficultyIncreaseInterval);
+
+            Player.IncreaseSpeedLimit();
+
+            //Gets whole seconds from the elapsedTime value
+            //difficultyIncreaseIntervalTimer = TimeSpan.FromSeconds(gameplayTimer).Seconds;
+
+            //if (difficultyIncreaseIntervalTimer == difficultyIncreaseInterval)
+            //{
+            //    Player.IncreaseSpeedLimit();
+            //    difficultyIncreaseIntervalTimer -= difficultyIncreaseInterval;
+            //}
+        }
     }
 }

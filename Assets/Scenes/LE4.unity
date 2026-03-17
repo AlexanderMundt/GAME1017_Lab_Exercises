@@ -252,7 +252,7 @@ MonoBehaviour:
   lastRenderer: {fileID: 0}
   currentRenderer: {fileID: 0}
   player: {fileID: 344784695}
-  gapRange: {x: 0.5, y: 1.5}
+  gapRange: {x: 0.5, y: 2.2}
   heightRange: {x: -1, y: 1}
 --- !u!4 &118143215
 Transform:
@@ -726,7 +726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speedLimit: 4
-  jumpForce: 9.81
+  jumpForce: 19.62
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -836,10 +836,10 @@ Rigidbody2D:
   m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1.5
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.5
   m_Material: {fileID: 6200000, guid: ef7dae6750e406e4999a54096cee84a5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1067,7 +1067,7 @@ MonoBehaviour:
   CurrentGameState: 0
   gameSceneName: LE4
   gameOverSceneName: LE4_GameOver
-  elapsedTimeSeconds: 0
+  difficultyIncreaseInterval: 15
 --- !u!1 &485759655
 GameObject:
   m_ObjectHideFlags: 0
