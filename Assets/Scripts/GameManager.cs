@@ -15,7 +15,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private string gameOverSceneName;
     [SerializeField] private int difficultyIncreaseInterval;
 
-    private float difficultyIncreaseIntervalTimer;
     private float gameplayTimer;
 
     private SoundManager soundManager;
@@ -129,7 +128,7 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         StopAllCoroutines();
-        ResetTimers();
+        ResetGameplayTimer();
 
         SetGameState(EGameState.InGameOver);
         SceneManager.LoadScene(gameOverSceneName);
@@ -166,26 +165,15 @@ public class GameManager : Singleton<GameManager>
         UiManager.OnRestartPressed();
 
         //Timers
-        ResetTimers();
+        ResetGameplayTimer();
         UiManager.UpdateTimerUi(gameplayTimer);
 
         SetGameState(EGameState.InMenu);
     }
 
-    private void ResetTimers()
-    {
-        ResetGameplayTimer();
-        ResetDifficultyTimer();
-    }
-
     private void ResetGameplayTimer()
     {
         gameplayTimer = 0.0f;
-    }
-
-    private void ResetDifficultyTimer()
-    {
-        difficultyIncreaseIntervalTimer = 0.0f;
     }
 
     //Coroutines
@@ -210,15 +198,6 @@ public class GameManager : Singleton<GameManager>
             yield return new WaitForSeconds(difficultyIncreaseInterval);
 
             Player.IncreaseSpeedLimit();
-
-            //Gets whole seconds from the elapsedTime value
-            //difficultyIncreaseIntervalTimer = TimeSpan.FromSeconds(gameplayTimer).Seconds;
-
-            //if (difficultyIncreaseIntervalTimer == difficultyIncreaseInterval)
-            //{
-            //    Player.IncreaseSpeedLimit();
-            //    difficultyIncreaseIntervalTimer -= difficultyIncreaseInterval;
-            //}
         }
     }
 }
