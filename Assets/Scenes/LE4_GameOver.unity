@@ -1047,7 +1047,7 @@ GameObject:
   - component: {fileID: 744312096}
   - component: {fileID: 744312097}
   m_Layer: 0
-  m_Name: SoundManager
+  m_Name: Sound Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1409,7 +1409,7 @@ GameObject:
   - component: {fileID: 1426981052}
   - component: {fileID: 1426981051}
   m_Layer: 5
-  m_Name: GameStateCanvas
+  m_Name: Game State Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1808,7 +1808,7 @@ GameObject:
   - component: {fileID: 1894203759}
   - component: {fileID: 1894203758}
   m_Layer: 5
-  m_Name: SoundManagerCanvas
+  m_Name: Sound Manager Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,19 +3,15 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private EGameState CurrentGameState;
     [SerializeField] private string gameSceneName;
     [SerializeField] private string gameOverSceneName;
-    [SerializeField] private int difficultyIncreaseInterval;
-
-    private float gameplayTimer;
 
     private SoundManager soundManager;
     public SoundManager SoundManager
@@ -107,9 +103,60 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void Start()
+    private Timer timer;
+    public Timer Timer
     {
-        SetGameState(EGameState.InMenu);
+        get
+        {
+            if (timer == null)
+            {
+                timer = FindFirstObjectByType<Timer>();
+            }
+
+            return timer;
+        }
+        private set
+        {
+            timer = value;
+        }
+    }
+
+    private DifficultyManager difficultyManager;
+    public DifficultyManager DifficultyManager
+    {
+        get
+        {
+            if (difficultyManager == null)
+            {
+                difficultyManager = FindFirstObjectByType<DifficultyManager>();
+            }
+
+            return difficultyManager;
+        }
+        private set
+        {
+            difficultyManager = value;
+        }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //True when we load the game scene
+        if (scene == SceneManager.GetSceneByName(gameSceneName))
+        {
+            GameSceneStart();
+        }
+        Debug.Log(scene.name);
     }
 
     //Getter
@@ -127,8 +174,8 @@ public class GameManager : Singleton<GameManager>
     //States
     public void GameOver()
     {
-        StopAllCoroutines();
-        ResetGameplayTimer();
+        Timer.StopTimer();
+        DifficultyManager.StopDifficultyAdjust();
 
         SetGameState(EGameState.InGameOver);
         SceneManager.LoadScene(gameOverSceneName);
@@ -138,10 +185,6 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene(gameSceneName);
         SetGameState(EGameState.InMenu);
-
-        //Start coroutines
-        StartCoroutine(TimerCoroutine());
-        StartCoroutine(DifficultyAdjustCoroutine());
     }
 
     //Fired from game scene
@@ -152,52 +195,27 @@ public class GameManager : Singleton<GameManager>
         BackgroundManager.Initialize();
         SegmentSpawner.Initialize();
         Player.Initialize();
-
+        
         UiManager.OnStartPressed();
     }
 
     public void RestartGame()
     {
+        UiManager.ResetUiButtons();
+        DifficultyManager.ResetDifficultyAdjust();
+        Timer.ResetTimer();
         Player.ResetPlayer();
         SegmentSpawner.ResetSegments();
         BackgroundManager.ResetBackground();
 
-        UiManager.OnRestartPressed();
-
-        //Timers
-        ResetGameplayTimer();
-        UiManager.UpdateTimerUi(gameplayTimer);
-
         SetGameState(EGameState.InMenu);
     }
 
-    private void ResetGameplayTimer()
+    //Scene change function
+    public void GameSceneStart()
     {
-        gameplayTimer = 0.0f;
-    }
-
-    //Coroutines
-    IEnumerator TimerCoroutine()
-    {
-        while (true)
-        {
-            //Control whether or not the timer is counting
-            //Only count time when in the 'InPlay' state
-            yield return new WaitUntil(() => CurrentGameState == EGameState.InPlay);
-
-            gameplayTimer += Time.deltaTime;
-            UiManager.UpdateTimerUi(gameplayTimer);
-        }
-    }
-
-    IEnumerator DifficultyAdjustCoroutine()
-    {
-        while (true)
-        {
-            yield return new WaitUntil(() => CurrentGameState == EGameState.InPlay);
-            yield return new WaitForSeconds(difficultyIncreaseInterval);
-
-            Player.IncreaseSpeedLimit();
-        }
+        UiManager.Initialize();
+        Timer.Initialize();
+        DifficultyManager.Initialize();
     }
 }

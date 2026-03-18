@@ -3,12 +3,10 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
-
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speedLimit;
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
@@ -31,7 +29,7 @@ public class PlayerController : MonoBehaviour
         rb.simulated = true;
 
         //Set initial speed
-        rb.linearVelocity = new Vector2(speedLimit, 0.0f);
+        rb.linearVelocity = new Vector2(GameManager.Instance.DifficultyManager.GetStartingSpeed(), 0.0f);
     }
 
     void Update()
@@ -63,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
             //Clamp only the x axis movement
             Vector2 currentLinVel = rb.linearVelocity;
-            currentLinVel.x = Mathf.Clamp(currentLinVel.x, 0.0f, speedLimit);
+            currentLinVel.x = Mathf.Clamp(currentLinVel.x, 0.0f, GameManager.Instance.DifficultyManager.GetSpeedLimit());
             rb.linearVelocity = currentLinVel;
 
             //Jump stuff
@@ -91,12 +89,6 @@ public class PlayerController : MonoBehaviour
     public void OnJump()
     {
         jumpPressed = true;
-    }
-
-    //Called by the gamemanager to increase difficulty
-    public void IncreaseSpeedLimit()
-    {
-        speedLimit++;
     }
 
     //Utils

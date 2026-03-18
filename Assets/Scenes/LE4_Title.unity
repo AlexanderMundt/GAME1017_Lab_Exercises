@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 1195114565}
   - component: {fileID: 1195114564}
   m_Layer: 5
-  m_Name: GameStateCanvas
+  m_Name: Game State Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 1635632455}
   - component: {fileID: 1635632456}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -485,7 +485,6 @@ MonoBehaviour:
   CurrentGameState: 0
   gameSceneName: LE4
   gameOverSceneName: LE4_GameOver
-  difficultyIncreaseInterval: 5
 --- !u!1 &1783425212
 GameObject:
   m_ObjectHideFlags: 0
