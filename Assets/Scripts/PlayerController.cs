@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Assignment 1
+ * Assignment:      Lab Exercise 4
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -51,10 +51,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.GetGameState() == EGameState.InPlay)
         {
             //If the player is stuck then gameover
-            if (rb.linearVelocity.magnitude == 0)
-            {
-                OnPlayerDeath();
-            }
+            CheckIfNotMoving();
 
             //Movement stuff
             rb.AddForce(1.0f * Vector2.right, ForceMode2D.Impulse);
@@ -101,13 +98,16 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < lowerYDeathPlane)
         {
-            OnPlayerDeath();
+            GameManager.Instance.GameOver();
         }
     }
 
-    private void OnPlayerDeath()
+    private void CheckIfNotMoving()
     {
-        GameManager.Instance.GameOver();
+        if (rb.linearVelocity.magnitude == 0)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 
     public void ResetPlayer()

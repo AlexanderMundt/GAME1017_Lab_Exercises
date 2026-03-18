@@ -1,3 +1,8 @@
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 4
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using UnityEngine;
 using System.Collections;
 
@@ -5,8 +10,8 @@ public class DifficultyManager : MonoBehaviour
 {
     [SerializeField] private float startingSpeed;
     [SerializeField] private float speedLimit;
-    [SerializeField] private int difficultyIncreaseTimeInterval;
-    [SerializeField] private float difficultySpeedIncreaseValue;
+    [SerializeField] private int difIncreaseTimeInterval;
+    [SerializeField] private float difSpeedIncreaseValue;
 
     public void Initialize()
     {
@@ -29,13 +34,13 @@ public class DifficultyManager : MonoBehaviour
         {
             //This is set up similarly to the timer coroutine
             yield return new WaitUntil(() => GameManager.Instance.GetGameState() == EGameState.InPlay);
-            yield return new WaitForSeconds(difficultyIncreaseTimeInterval);
+            yield return new WaitForSeconds(difIncreaseTimeInterval);
 
             //Protects the IncreaseSpeedLimit function from firing if the InPlay state was changed during the
             //above WaitForSeconds interval
             if (GameManager.Instance.GetGameState() == EGameState.InPlay)
             {
-                IncreaseSpeedLimit(difficultySpeedIncreaseValue);
+                IncreaseSpeedLimit(difSpeedIncreaseValue);
             }
         }
     }
@@ -51,12 +56,7 @@ public class DifficultyManager : MonoBehaviour
         return speedLimit;
     }
 
-    //Setters
-    public void SetSpeedLimit(float newSpeed)
-    {
-        speedLimit = newSpeed;
-    }
-
+    //Increase difficulty
     public void IncreaseSpeedLimit(float speedIncrease)
     {
         speedLimit += speedIncrease;

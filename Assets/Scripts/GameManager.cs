@@ -1,11 +1,10 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Assignment 1
+ * Assignment:      Lab Exercise 4
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class GameManager : Singleton<GameManager>
 {
