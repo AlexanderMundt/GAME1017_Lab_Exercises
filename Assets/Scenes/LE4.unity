@@ -3715,8 +3715,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DifficultyManager
   startingSpeed: 4
   speedLimit: 4
-  difficultyIncreaseTimeInterval: 2
-  difficultySpeedIncreaseValue: 0.5
+  difIncreaseTimeInterval: 10
+  difSpeedIncreaseValue: 1
 --- !u!4 &1633530482
 Transform:
   m_ObjectHideFlags: 0
