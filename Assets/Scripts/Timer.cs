@@ -10,18 +10,18 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     [SerializeField] private TMP_Text timerValue;
-    [SerializeField] private float gameplayTimer;
+    [SerializeField] private float currentElapsedTime;
 
     public void Initialize()
     {
-        gameplayTimer = 0.0f;
+        currentElapsedTime = 0.0f;
         StartCoroutine(TimerCoroutine());
     }
 
     public void ResetTimer()
     {
-        gameplayTimer = 0.0f;
-        UpdateTimerUi(gameplayTimer);
+        currentElapsedTime = 0.0f;
+        UpdateTimerUi(currentElapsedTime);
     }
 
     public void StopTimer()
@@ -31,10 +31,15 @@ public class Timer : MonoBehaviour
 
     private void UpdateTimerUi(float elapsedTime)
     {
-        timerValue.text = GetElapsedTimeFormatted(elapsedTime);
+        timerValue.text = FormatElapsedTime(elapsedTime);
     }
 
-    private string GetElapsedTimeFormatted(float elapsedTime)
+    public float GetCurrentElapsedTime()
+    {
+        return currentElapsedTime;
+    }
+
+    private string FormatElapsedTime(float elapsedTime)
     {
         int minutes = (int)elapsedTime / 60;
         float seconds = elapsedTime % 60.0f;
@@ -50,8 +55,8 @@ public class Timer : MonoBehaviour
             yield return new WaitUntil(() => GameManager.Instance.GetGameState() == EGameState.InPlay);
 
             //These lines only fire when in the play state
-            gameplayTimer += Time.deltaTime;
-            UpdateTimerUi(gameplayTimer);
+            currentElapsedTime += Time.deltaTime;
+            UpdateTimerUi(currentElapsedTime);
         }
     }
 }

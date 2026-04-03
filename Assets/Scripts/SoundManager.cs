@@ -3,17 +3,29 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
+using System;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
     [SerializeField] private AudioSource musicSource, sfxSource;
 
+    public event Action<float, EAudioType> OnVolumeChangeFinished;
+    private Action<float, EAudioType> OnVolumeChangeFinishedStorage;
+
+    private void OnDisable()
+    {
+        OnVolumeChangeFinished -= OnVolumeChangeFinishedStorage;
+    }
+
     private void Start()
     {
+        OnVolumeChangeFinishedStorage = GameManager.Instance.SaveSystem.SaveVolume;
+        OnVolumeChangeFinished += OnVolumeChangeFinishedStorage;
+
         if (musicSource)
         {
-            sfxSource.loop = true;
+            musicSource.loop = true;
             musicSource.Play();
         }
 
@@ -32,5 +44,21 @@ public class SoundManager : MonoBehaviour
     public void ChangeSfxVolume(float newVolume)
     {
         sfxSource.volume = newVolume;
+    }
+
+    public void VolumeChangeFinished(float newVolume, EAudioType audioType)
+    {
+        OnVolumeChangeFinished?.Invoke(newVolume, audioType);
+    }
+
+    public float GetVolume(EAudioType audioType)
+    {
+        return audioType switch
+        {
+            EAudioType.None => 0.0f,
+            EAudioType.Music => musicSource.volume,
+            EAudioType.Sfx => sfxSource.volume,
+            _ => 0.0f,
+        };
     }
 }

@@ -4,12 +4,13 @@
  * Professor:       Ernie Burrows
  */
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-public class SliderAudioController : MonoBehaviour
+public class SliderAudioController : MonoBehaviour, IPointerUpHandler
 {
-    [SerializeField] private EAudioType soundType;
+    [SerializeField] private EAudioType audioType;
 
     private Slider slider;
 
@@ -20,10 +21,9 @@ public class SliderAudioController : MonoBehaviour
 
     private void Start()
     {
-        ChangeAudioSliderVolume(slider.value);
+        slider.value = GameManager.Instance.SoundManager.GetVolume(audioType);
     }
 
-    //Delegates
     private void OnEnable()
     {
         slider.onValueChanged.AddListener(ChangeAudioSliderVolume);
@@ -36,7 +36,7 @@ public class SliderAudioController : MonoBehaviour
 
     private void ChangeAudioSliderVolume(float newVolume)
     {
-        switch (soundType)
+        switch (audioType)
         {
             case EAudioType.None:
                 Debug.Log("Sound Type Not Set On: " + gameObject.name);
@@ -53,5 +53,10 @@ public class SliderAudioController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        GameManager.Instance.SoundManager.VolumeChangeFinished(slider.value, audioType);
     }
 }

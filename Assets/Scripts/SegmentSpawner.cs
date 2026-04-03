@@ -11,14 +11,13 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] private GameObject[] segmentPrefabs;
     [SerializeField] private float maxDistanceFromPlayer;
 
-    //Object pool <--- not anymore in LE4
     [SerializeField] private List<GameObject> segments = new();
     [SerializeField] private int segmentListSize;
 
     [SerializeField] private GameObject lastSegment, currentSegment;
     [SerializeField] private Renderer lastRenderer, currentRenderer;
 
-    [SerializeField] private GameObject player;
+    [SerializeField] private PlayerController player;
 
     [Tooltip("Represents the min (x) and max (y) distance that segments can spawn from each other")]
     [SerializeField] private Vector2 gapRange;
@@ -28,7 +27,7 @@ public class SegmentSpawner : MonoBehaviour
 
     public void Initialize()
     {
-        player = GameManager.Instance.Player.gameObject;
+        player = GameManager.Instance.Player;
 
         //Segment 1
         lastSegment = Instantiate(segmentPrefabs[0], new Vector3(player.transform.position.x, player.transform.position.y - 1, 0), Quaternion.identity, transform);
@@ -114,15 +113,6 @@ public class SegmentSpawner : MonoBehaviour
     //Reset segments
     public void ResetSegments()
     {
-        //"Turn off" all of the segments
-        //ReturnAllToPool();
-
-        //Reset the position of all of the segments
-        //foreach (GameObject seg in segments)
-        //{
-        //    seg.transform.position = transform.position;
-        //}
-
         lastSegment = null;
         lastRenderer = null;
 
@@ -138,127 +128,4 @@ public class SegmentSpawner : MonoBehaviour
 
         segments.Clear();
     }
-
-    //----Old and unused, saving for later if needed---
-    //private void Start()
-    //{
-    //    if (!player) player = GameManager.Instance.Player.gameObject;
-
-    //    GameObject go;
-    //    for (int i = 0; i < segmentPoolSize; i++)
-    //    {
-    //        go = Instantiate(segmentPrefab, this.transform);
-    //        go.SetActive(false);
-    //        segments.Add(go);
-    //    }
-    //}
-
-    //---Old object pool way---
-    //public void Initialize()
-    //{
-    //    //Set up variables and spawn in the first platform the player will start on
-    //    lastSegment = GetNextObject();
-    //    lastSegment.transform.position = new Vector3(0f, player.transform.position.y - 1, 0f);
-    //    lastRenderer = lastSegment.GetComponent<Renderer>();
-
-    //    //Set up variables and spawn in the second platform
-    //    currentSegment = GetNextObject();
-    //    currentRenderer = currentSegment.GetComponent<Renderer>();
-
-    //    float xSpawnPos = lastRenderer.bounds.max.x + (currentRenderer.bounds.size.x / 2) + gapSize;
-    //    currentSegment.transform.position = new Vector3(xSpawnPos, player.transform.position.y - 1, 0f);
-
-    //    //"Shift over" the references so that our most recently spawned platform is our 'lastSegment'
-    //    lastSegment = currentSegment;
-    //    lastRenderer = currentRenderer;
-    //}
-
-    //GetNext
-    //private GameObject GetNextObject()
-    //{
-    //    foreach (GameObject seg in segments)
-    //    {
-    //        if (!seg.activeSelf)
-    //        {
-    //            seg.SetActive(true);
-    //            return seg;
-    //        }
-    //    }
-
-    //    return null;
-    //}
-
-    //private bool IsNextObjectAvailable()
-    //{
-    //    foreach (GameObject seg in segments)
-    //    {
-    //        if (!seg.activeSelf)
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    return false;
-    //}
-
-    //Return to pool
-    //private void ReturnToPool(GameObject seg)
-    //{
-    //    //Gameobject = inactive
-    //    seg.SetActive(false);
-    //}
-
-    //Return all to pool
-    //private void ReturnAllToPool()
-    //{
-    //    foreach (GameObject seg in segments)
-    //    {
-    //        ReturnToPool(seg);
-    //    }
-    //}
-
-    //---Old object pool way---
-    //private void SpawnPlatform()
-    //{
-    //    //Make sure that there is a new segment to be spawned up ahead
-    //    //if (!IsNextObjectAvailable())
-    //    //{
-    //    //    DespawnFurthestPlatform();
-    //    //}
-
-    //    //Randomize the gap size
-    //    gapSize = Random.Range(0.5f, 1.5f);
-
-    //    //Randomize the height
-    //    float heightOffset = Random.Range(-1.2f, 1.2f);
-
-    //    currentSegment = GetNextObject();
-    //    currentRenderer = currentSegment.GetComponent<Renderer>();
-
-    //    float xSpawnPos = lastRenderer.bounds.max.x + (currentRenderer.bounds.size.x / 2) + gapSize;
-    //    currentSegment.transform.position = new Vector3(xSpawnPos, lastSegment.transform.position.y + heightOffset, 0);
-
-    //    lastSegment = currentSegment;
-    //    lastRenderer = currentRenderer;
-    //}
-
-    //private void DespawnFurthestPlatform()
-    //{
-    //    float prevDist = 0.0f;
-    //    float dist = 0.0f;
-    //    GameObject farthestBehindSegment = null;
-
-    //    foreach (GameObject seg in segments)
-    //    {
-    //        dist = Vector3.Distance(seg.transform.position, player.transform.position);
-
-    //        if (dist > prevDist)
-    //        {
-    //            prevDist = dist;
-    //            farthestBehindSegment = seg;
-    //        }
-    //    }
-
-    //    ReturnToPool(farthestBehindSegment);
-    //}
 }

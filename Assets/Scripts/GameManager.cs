@@ -9,8 +9,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private EGameState CurrentGameState;
+    [SerializeField] private string titleSceneName;
     [SerializeField] private string gameSceneName;
     [SerializeField] private string gameOverSceneName;
+
+    public Leaderboard Leaderboard => FindFirstObjectByType<Leaderboard>();
 
     private SoundManager soundManager;
     public SoundManager SoundManager
@@ -138,6 +141,24 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private SaveSystem saveSystem;
+    public SaveSystem SaveSystem
+    {
+        get
+        {
+            if (saveSystem == null)
+            {
+                saveSystem = FindFirstObjectByType<SaveSystem>();
+            }
+
+            return saveSystem;
+        }
+        private set
+        {
+            saveSystem = value;
+        }
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -150,10 +171,20 @@ public class GameManager : Singleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //True when we load the title scene
+        if (scene == SceneManager.GetSceneByName(titleSceneName))
+        {
+            TitleSceneStart();
+        }
         //True when we load the game scene
-        if (scene == SceneManager.GetSceneByName(gameSceneName))
+        else if (scene == SceneManager.GetSceneByName(gameSceneName))
         {
             GameSceneStart();
+        }
+        //True when we load the game over scene
+        else if (scene == SceneManager.GetSceneByName(gameOverSceneName))
+        {
+            GameOverSceneStart();
         }
         Debug.Log(scene.name);
     }
@@ -174,6 +205,7 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         Timer.StopTimer();
+        SaveSystem.SaveTimer(Timer.GetCurrentElapsedTime());
         DifficultyManager.StopDifficultyAdjust();
 
         SetGameState(EGameState.InGameOver);
@@ -210,11 +242,29 @@ public class GameManager : Singleton<GameManager>
         SetGameState(EGameState.InMenu);
     }
 
-    //Scene change function
+    //Scene change functions
+    public void TitleSceneStart()
+    {
+        //Loads the volume settings from the last run
+        SoundManager.ChangeMusicVolume(SaveSystem.LoadVolume(EAudioType.Music));
+        SoundManager.ChangeSfxVolume(SaveSystem.LoadVolume(EAudioType.Sfx));
+    }
+
     public void GameSceneStart()
     {
+        SoundManager.ChangeMusicVolume(SaveSystem.LoadVolume(EAudioType.Music));
+        SoundManager.ChangeSfxVolume(SaveSystem.LoadVolume(EAudioType.Sfx));
+
         UiManager.Initialize();
         Timer.Initialize();
         DifficultyManager.Initialize();
+    }
+
+    public void GameOverSceneStart()
+    {
+        SoundManager.ChangeMusicVolume(SaveSystem.LoadVolume(EAudioType.Music));
+        SoundManager.ChangeSfxVolume(SaveSystem.LoadVolume(EAudioType.Sfx));
+
+        Leaderboard.Initialize(SaveSystem.GetScores());
     }
 }
