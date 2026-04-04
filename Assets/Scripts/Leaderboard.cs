@@ -1,3 +1,8 @@
+/* Completed By:    Alexander Mundt - 101632886
+ * Assignment:      Lab Exercise 5
+ * Class:           GAME-1017
+ * Professor:       Ernie Burrows
+ */
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
