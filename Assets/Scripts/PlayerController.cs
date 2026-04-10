@@ -3,10 +3,12 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private float startingSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance;
@@ -14,10 +16,16 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Represents the lowest position that player can go in the y axis before dying")]
     [SerializeField] private float lowerYDeathPlane;
 
+    [Header("Difficulty Related")]
+    [SerializeField] private float speedLimit;
+    [SerializeField] private int difIncreaseTimeInterval;
+    [SerializeField] private float difSpeedIncreaseValue;
+
     private Vector3 startPosition;
     private Rigidbody2D rb;
     private bool jumpPressed = false;
     private bool isGrounded = false;
+    private Coroutine difficultyAdjust;
 
     public void Initialize()
     {
@@ -29,7 +37,11 @@ public class PlayerController : MonoBehaviour
         rb.simulated = true;
 
         //Set initial speed
-        rb.linearVelocity = new Vector2(GameManager.Instance.DifficultyManager.GetStartingSpeed(), 0.0f);
+        rb.linearVelocity = new Vector2(startingSpeed, 0.0f);
+
+        //Start the difficulty increase coroutine
+        //Only start if 'difficultyAdjust' is null
+        difficultyAdjust ??= StartCoroutine(DifficultyAdjustCoroutine());
     }
 
     void Update()
@@ -58,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
             //Clamp only the x axis movement
             Vector2 currentLinVel = rb.linearVelocity;
-            currentLinVel.x = Mathf.Clamp(currentLinVel.x, 0.0f, GameManager.Instance.DifficultyManager.GetSpeedLimit());
+            currentLinVel.x = Mathf.Clamp(currentLinVel.x, 0.0f, speedLimit);
             rb.linearVelocity = currentLinVel;
 
             //Jump stuff
@@ -110,6 +122,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Increase difficulty
+    IEnumerator DifficultyAdjustCoroutine()
+    {
+        while (true)
+        {
+            //This is set up similarly to the timer coroutine
+            yield return new WaitUntil(() => GameManager.Instance.GetGameState() == EGameState.InPlay);
+            yield return new WaitForSeconds(difIncreaseTimeInterval);
+
+            //Protects the IncreaseSpeedLimit function from firing if the InPlay state was changed during the
+            //above WaitForSeconds interval
+            if (GameManager.Instance.GetGameState() == EGameState.InPlay)
+            {
+                speedLimit += difSpeedIncreaseValue;
+            }
+        }
+    }
+
+    public void OnGameOver()
+    {
+        if (difficultyAdjust != null)
+        {
+            StopCoroutine(difficultyAdjust);
+            difficultyAdjust = null;
+        }
+    }
+
     public void ResetPlayer()
     {
         //Load the player's starting position
@@ -119,5 +158,9 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.simulated = false;
         jumpPressed = false;
+
+        //Reset difficulty
+        speedLimit = startingSpeed;
+        OnGameOver();
     }
 }

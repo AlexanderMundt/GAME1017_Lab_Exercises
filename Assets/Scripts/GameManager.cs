@@ -123,24 +123,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private DifficultyManager difficultyManager;
-    public DifficultyManager DifficultyManager
-    {
-        get
-        {
-            if (difficultyManager == null)
-            {
-                difficultyManager = FindFirstObjectByType<DifficultyManager>();
-            }
-
-            return difficultyManager;
-        }
-        private set
-        {
-            difficultyManager = value;
-        }
-    }
-
     private SaveSystem saveSystem;
     public SaveSystem SaveSystem
     {
@@ -206,7 +188,9 @@ public class GameManager : Singleton<GameManager>
     {
         Timer.StopTimer();
         SaveSystem.SaveTimer(Timer.GetCurrentElapsedTime());
-        DifficultyManager.StopDifficultyAdjust();
+
+        Player.OnGameOver();
+        SegmentSpawner.OnGameOver();
 
         SetGameState(EGameState.InGameOver);
         SceneManager.LoadScene(gameOverSceneName);
@@ -233,7 +217,6 @@ public class GameManager : Singleton<GameManager>
     public void RestartGame()
     {
         UiManager.ResetUiButtons();
-        DifficultyManager.ResetDifficultyAdjust();
         Timer.ResetTimer();
         Player.ResetPlayer();
         SegmentSpawner.ResetSegments();
@@ -257,7 +240,6 @@ public class GameManager : Singleton<GameManager>
 
         UiManager.Initialize();
         Timer.Initialize();
-        DifficultyManager.Initialize();
     }
 
     public void GameOverSceneStart()

@@ -3,11 +3,13 @@
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SegmentSpawner : MonoBehaviour
 {
+    [Header("Segment Spawning")]
     [SerializeField] private GameObject[] segmentPrefabs;
     [SerializeField] private float maxDistanceFromPlayer;
 
@@ -19,11 +21,17 @@ public class SegmentSpawner : MonoBehaviour
 
     [SerializeField] private PlayerController player;
 
+    [Header("Segment Randomness")]
     [Tooltip("Represents the min (x) and max (y) distance that segments can spawn from each other")]
     [SerializeField] private Vector2 gapRange;
     [SerializeField] private Vector2 heightRange;
 
+    [Header("Segment Difficulty")]
+    [SerializeField] private int difIncreaseTimeInterval;
+    [SerializeField] private float difGapRangeIncreaseValue;
+
     private int lastIndex;
+    private Coroutine difficultyAdjust;
 
     public void Initialize()
     {
@@ -46,6 +54,7 @@ public class SegmentSpawner : MonoBehaviour
         lastRenderer = currentRenderer;
 
         lastIndex = 1;
+        difficultyAdjust = StartCoroutine(DifficultyAdjustCoroutine());
     }
 
     private void Update()
@@ -110,6 +119,34 @@ public class SegmentSpawner : MonoBehaviour
         lastIndex = index;
     }
 
+    //Increase difficulty
+    IEnumerator DifficultyAdjustCoroutine()
+    {
+        while (true)
+        {
+            //This is set up similarly to the timer coroutine
+            yield return new WaitUntil(() => GameManager.Instance.GetGameState() == EGameState.InPlay);
+            yield return new WaitForSeconds(difIncreaseTimeInterval);
+
+            //Protects the IncreaseSpeedLimit function from firing if the InPlay state was changed during the
+            //above WaitForSeconds interval
+            if (GameManager.Instance.GetGameState() == EGameState.InPlay)
+            {
+                gapRange.x += difGapRangeIncreaseValue;
+                gapRange.y += difGapRangeIncreaseValue;
+            }
+        }
+    }
+
+    public void OnGameOver()
+    {
+        if (difficultyAdjust != null)
+        {
+            StopCoroutine(difficultyAdjust);
+            difficultyAdjust = null;
+        }
+    }
+
     //Reset segments
     public void ResetSegments()
     {
@@ -125,7 +162,8 @@ public class SegmentSpawner : MonoBehaviour
         {
             Destroy(seg);
         }
-
         segments.Clear();
+
+        OnGameOver();
     }
 }
