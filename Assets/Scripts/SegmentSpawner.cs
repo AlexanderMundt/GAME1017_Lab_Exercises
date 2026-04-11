@@ -1,5 +1,5 @@
 /* Completed By:    Alexander Mundt - 101632886
- * Assignment:      Lab Exercise 5
+ * Assignment:      Assignment 2
  * Class:           GAME-1017
  * Professor:       Ernie Burrows
  */
@@ -19,8 +19,6 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] private GameObject lastSegment, currentSegment;
     [SerializeField] private Renderer lastRenderer, currentRenderer;
 
-    [SerializeField] private PlayerController player;
-
     [Header("Segment Randomness")]
     [Tooltip("Represents the min (x) and max (y) distance that segments can spawn from each other")]
     [SerializeField] private Vector2 gapRange;
@@ -30,6 +28,7 @@ public class SegmentSpawner : MonoBehaviour
     [SerializeField] private int difIncreaseTimeInterval;
     [SerializeField] private float difGapRangeIncreaseValue;
 
+    private PlayerController player;
     private int lastIndex;
     private Coroutine difficultyAdjust;
 
@@ -54,7 +53,10 @@ public class SegmentSpawner : MonoBehaviour
         lastRenderer = currentRenderer;
 
         lastIndex = 1;
-        difficultyAdjust = StartCoroutine(DifficultyAdjustCoroutine());
+
+        //Start the difficulty increase coroutine
+        //Only start if 'difficultyAdjust' is null
+        difficultyAdjust ??= StartCoroutine(DifficultyAdjustCoroutine());
     }
 
     private void Update()
